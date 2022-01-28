@@ -1,64 +1,49 @@
-import { AppBar, Collapse, IconButton, Toolbar } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  AppBar,
+  Button,
+  Collapse,
+  IconButton, Toolbar,
+  Typography
+} from "@material-ui/core";
+import useStyles from './HeaderStyle';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useEffect, useState } from "react";
 import { Link as Scroll } from "react-scroll";
+import HeaderMobil from "./HeaderMobil";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    fontFamily: "Nunito",
-  },
-  appBar: {
-    background: "none",
-  },
-  appBarWrapper: {
-    width: "80%",
-    margin: "0 auto",
-  },
-  appbarTitle: {
-    flexGrow: "1",
-  },
-  container: {
-    textAlign: "center",
-  },
-  title: {
-    color: "#FBFAD9",
-    fontSize: "4.5rem",
-  },
-  goDown: {
-    color: '#990000',
-    fontSize: "4rem",
-  },
-}));
 
 const Header = () => {
-  const classes = useStyles();
   const [checked, setChecked] = useState(false);
+  const classes = useStyles();
+  const [width, setWidth] = useState(window.innerWidth);
+
+  const breakpoint = 920;
 
   useEffect(() => {
     setChecked(true);
   }, []);
 
-  return (
-    <div className={classes.root} id="header">
-      <AppBar className={classes.appBar}>
-        <Toolbar className={classes.appBarWrapper}>
-          <h1 className={classes.appBarTitle}> Slider App</h1>
-        </Toolbar>
-      </AppBar>
+  useEffect(() => {
+    window.addEventListener("resize", () => setWidth(window.innerWidth));
+}, []);
 
-      <Collapse in={checked} {...(checked ? { timeout: 1000 } : {})}>
+  return (
+     <div className={classes.root}>
+       <AppBar className={classes.appBar}>
+         <Toolbar className={classes.appBarWrapper}>
+           <Typography className={classes.appBarTittel}>Slider App</Typography>
+           {width < breakpoint  ?  <HeaderMobil /> : <RenderButtons classes={classes}/>}
+           </Toolbar>
+       </AppBar>
+
+      <Collapse in={checked} timeout={1000}>
         <div className={classes.container}>
-          <h1 className={classes.title}>
+          <h1 className={classes.tittel}>
             Welcome to <br /> the slideshow !
           </h1>
           <Scroll to="scroll-to-slider" smooth={true}>
-            <IconButton>
-              <ExpandMoreIcon className={classes.goDown} />
+            <IconButton >
+              <ExpandMoreIcon className={classes.gaNed} />
             </IconButton>
           </Scroll>
         </div>
@@ -66,5 +51,15 @@ const Header = () => {
     </div>
   );
 };
+
+const RenderButtons = ({classes}) => {
+  return <div className={classes.buttonWrapper}>
+    <Button className={classes.faneTittel}> Tjenester </Button>
+    <Button className={classes.faneTittel}> Tilbud </Button>
+    <Button className={classes.faneTittel}> Kontakt oss </Button>
+    <Button className={classes.faneTittel}> FAQ </Button>
+  </div>;
+}
+
 
 export default Header;
